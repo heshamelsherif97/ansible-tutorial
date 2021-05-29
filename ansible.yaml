@@ -1,0 +1,23 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Update centos 7 packages
+    yum: 
+      name: '*'
+      state: latest
+  - name: Install Java open sdk 11 and other system libs
+    yum: 
+      name: 
+        - java-11-openjdk-devel
+        - java-11-openjdk
+      state: present
+  - name: Install list of packages provided from arguments
+    yum:
+      name: "{{ packages }}"
+      state: present
+  - name: Run monitoring script as a cron job"
+    cron:
+      name: "Monitoring Resources cron job"
+      minute: "*/1"
+      job: "/usr/src/app/resource_utilization.py >> /var/log/cron_logs.log 2>&1"
+      user: root
